@@ -1,30 +1,22 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
-    // XP Reward
+    // ================= XP REWARD =================
     if (message.type === "rewardXP") {
 
         chrome.storage.local.get(["xp"], (data) => {
-
             let xp = data.xp || 0;
             xp += message.value;
-
-            chrome.storage.local.set({ xp: xp });
+            chrome.storage.local.set({ xp });
         });
     }
 
-    // Store notifications in Waiting Room
-    if (message.type === "storeNotification") {
+    // ================= CLOSE CURRENT TAB =================
+    if (message.type === "closeCurrentTab") {
 
-        chrome.storage.local.get(["waitingRoom"], (data) => {
-
-            let waitingRoom = data.waitingRoom || [];
-
-            waitingRoom.push({
-                text: message.text,
-                time: Date.now()
-            });
-
-            chrome.storage.local.set({ waitingRoom: waitingRoom });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs.length > 0) {
+                chrome.tabs.remove(tabs[0].id);
+            }
         });
     }
 });
