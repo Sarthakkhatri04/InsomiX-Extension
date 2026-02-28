@@ -70,7 +70,7 @@ function startMonitoring() {
         if (timeSpent < 60) {
             chrome.runtime.sendMessage({
                 type: "rewardXP",
-                value: 100
+                value: 10
             });
         }
     });
